@@ -6,7 +6,7 @@ USE employeeTracker_DB;
 
 CREATE TABLE department (
     ID INT Primary KEY,
-    Dept_Name VARCHAR(30)
+    DeptName VARCHAR(30)
 );
 
 CREATE TABLE employeeRole (
