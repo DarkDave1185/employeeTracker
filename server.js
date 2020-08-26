@@ -79,7 +79,7 @@ function choiceTwo() {
                 name: 'dept',
                 type: 'rawlist',
                 message: 'Choose a new Department',
-                choices: ['Human Resources', 'Custodial', 'Manager', 'Retention']
+                choices: ['Human Resources', 'Custodial', 'Retention', 'Community Outreach']
             }).then(function(answer) {
                 let dept = answer.dept;
                 connection.query('INSERT INTO department (DeptName) VALUES (?)', [dept], (err, results) => {
