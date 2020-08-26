@@ -4,6 +4,7 @@ const cTable = require('console.table');
 const choices = require('inquirer/lib/objects/choices');
 
 
+
 // DB Connection 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -13,6 +14,7 @@ const connection = mysql.createConnection({
     database: 'employeeTracker_DB'
 });
 
+
 // Questions
 function start() {
     inquirer.prompt({
@@ -21,7 +23,9 @@ function start() {
         message: 'What would you like to do?',
         choices: ['View Departments, Roles and Employees', 'Add a Department, Role or Employee']
     }).then(function(answer) {
-        if (answer.main_menu === 'View Departments, Roles and Employees') {
+        console.log(answer)
+        if (answer.menu === 'View Departments, Roles and Employees') {
+            console.log("answer")
             return choiceOne();
         } else if (answer.main_menu === 'Add a Department, Role or Employee') {
             return choiceTwo();
@@ -31,30 +35,33 @@ function start() {
 
 function choiceOne() {
     inquirer.prompt({
-        name: 'rawl1ist',
-        type: 'list',
+        name: 'addlist',
+        type: 'rawlist',
         message: 'Please select the option you would like to see',
         choices: ['Departments', 'Employee Roles', 'Employees', 'Return']
     }).then(function(answer) {
-        if (answer.tableList === 'Departments') {
+        console.log(answer.addlist)
+        if (answer.addlist == 'Departments') {
+            console.log("Departments")
             connection.query('SELECT * FROM department', (err, results) => {
                 if (err) throw err;
                 console.table(results);
                 choiceOne();
             })
-        } else if (answer.tableList === 'Employee Roles') {
-            connection.query('SELECT * FROM emp_role', (err, results) => {
-                if (err) throw errl;
+        } else if (answer.addlist === 'Employee Roles') {
+            connection.query('SELECT * FROM employeeRole', (err, results) => {
+                if (err) throw err;
                 console.table(results);
                 choiceOne();
             })
-        } else if (answer.tableList === 'Employees') {
+        } else if (answer.addlist === 'Employees') {
+            console.log("employee")
             connection.query('SELECT * FROM employee', (err, results) => {
                 if (err) throw err;
                 console.table(results);
                 choiceOne();
             })
-        } else if (answer.tableList === 'Return') {
+        } else if (answer.addlist === 'Return') {
             return start();
         }
     })
@@ -63,18 +70,19 @@ function choiceOne() {
 function choiceTwo() {
     inquirer.prompt({
         name: 'add',
-        type: 'list',
+        type: 'rawlist',
         message: 'Please select the category you would like to add data to',
         choices: ['Departments', 'Role', 'Employee', 'Return']
     }).then(function(answer) {
         if (answer.add === 'Departments') {
             inquirer.prompt({
                 name: 'dept',
-                type: 'input',
-                message: 'Add a new Department'
+                type: 'rawlist',
+                message: 'Choose a new Department',
+                choices: ['Human Resources', 'Custodial', 'Manager', 'Retention']
             }).then(function(answer) {
                 let dept = answer.dept;
-                connection.query('INSERT INTO department (Dept_Name) VALUES (?)', [dept], (err, results) => {
+                connection.query('INSERT INTO department (DeptName) VALUES (?)', [dept], (err, results) => {
                     if (err) throw err;
                     if (!err) {
                         console.table(results);
@@ -95,14 +103,14 @@ function choiceTwo() {
                 message: 'Add a new Employee Role (title)'
             }).then(function(answer) {
                 let role = answer.role;
-                connection.query('INSERT INTO emp_role (Title) VALUES (?)', [role], (err, results) => {
+                connection.query('INSERT INTO employeeRole (Title) VALUES (?)', [role], (err, results) => {
                     if (err) throw err;
                     inquirer.prompt({
                         name: 'salary',
                         type: 'number',
                         message: 'Add Yearly Salary'
                     }).then(function(answer) {
-                        connection.query('UPDATE emp_role SET Salary = ? where title =?', [answer.salary, role], (err, results) => {
+                        connection.query('UPDATE employeeRole SET Salary = ? where title =?', [answer.salary, role], (err, results) => {
                             if (err) throw err;
                             // console.table(results)
                         })
@@ -111,9 +119,9 @@ function choiceTwo() {
                             type: 'number',
                             message: 'Select Department ID'
                         }).then(function(answer) {
-                            connection.query('UPDATE emp_role SET Department_ID = ? where title =?', [answer.dept_ID, role], (err, results) => {
+                            connection.query('UPDATE employeeRole SET DepartmentID = ? where title =?', [answer.dept_ID, role], (err, results) => {
                                 if (err) throw err
-                                connection.query('SELECT * FROM emp_role', (err, results) => {
+                                connection.query('SELECT * FROM employeeRole', (err, results) => {
                                     if (err) throw err;
                                     console.table(results)
                                     choiceTwo();
@@ -141,9 +149,9 @@ function choiceTwo() {
                 },
             ]).then(function(answer) {
                 console.log(answer);
-                connection.query('INSERT INTO employee (First_Name, Last_Name, Role_ID) VALUES (?,?,?)', [answer.first, answer.last, answer.role], (err, results) => {
+                connection.query('INSERT INTO employee (FirstName, LastName, RoleID) VALUES (?,?,?)', [answer.first, answer.last, answer.role], (err, results) => {
                     if (err) throw err;
-                    connection.query('SELECT First_Name, Last_Name FROM employee', (err, results) => {
+                    connection.query('SELECT FirstName, LastName FROM employee', (err, results) => {
                         if (err) throw err;
                         console.table(results)
                         choiceTwo();
