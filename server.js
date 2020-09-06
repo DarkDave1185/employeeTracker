@@ -27,7 +27,7 @@ function start() {
         if (answer.menu === 'View Departments, Roles and Employees') {
             console.log("answer")
             return choiceOne();
-        } else if (answer.main_menu === 'Add a Department, Role or Employee') {
+        } else if (answer.menu === 'Add a Department, Role or Employee') {
             return choiceTwo();
         };
     });
@@ -69,12 +69,12 @@ function choiceOne() {
 
 function choiceTwo() {
     inquirer.prompt({
-        name: 'add',
+        name: 'create',
         type: 'rawlist',
         message: 'Please select the category you would like to add data to',
         choices: ['Departments', 'Role', 'Employee', 'Return']
     }).then(function(answer) {
-        if (answer.add === 'Departments') {
+        if (answer.create === 'Departments') {
             inquirer.prompt({
                 name: 'dept',
                 type: 'rawlist',
@@ -96,11 +96,12 @@ function choiceTwo() {
                     }
                 })
             })
-        } else if (answer.add === 'Role') {
+        } else if (answer.create === 'Role') {
             inquirer.prompt({
                 name: 'role',
-                type: 'input',
-                message: 'Add a new Employee Role (title)'
+                type: 'rawlist',
+                message: 'Add a new Employee Role (title)',
+                choices: ['Developer', 'Accountant', 'Marketing', 'Manager']
             }).then(function(answer) {
                 let role = answer.role;
                 connection.query('INSERT INTO employeeRole (Title) VALUES (?)', [role], (err, results) => {
@@ -131,7 +132,7 @@ function choiceTwo() {
                     })
                 }, )
             })
-        } else if (answer.add === 'Employee') {
+        } else if (answer.create === 'Employee') {
             inquirer.prompt([{
                     name: 'first',
                     type: 'input',
