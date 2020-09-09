@@ -82,7 +82,7 @@ function choiceTwo() {
                 choices: ['Human Resources', 'Custodial', 'Retention', 'Community Outreach']
             }).then(function(answer) {
                 let dept = answer.dept;
-                connection.query('INSERT INTO department (DeptName) VALUES (?)', [dept], (err, results) => {
+                connection.query('insert into department values (id, ?);', [dept], (err, results) => {
                     if (err) throw err;
                     if (!err) {
                         console.table(results);

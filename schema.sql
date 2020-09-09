@@ -5,7 +5,7 @@ CREATE DATABASE employeeTracker_DB;
 USE employeeTracker_DB;
 
 CREATE TABLE department (
-    ID INT Primary KEY,
+    ID INT UNASSIGNED Auto_Increment Primary KEY,
     DeptName VARCHAR(30)
 );
 
