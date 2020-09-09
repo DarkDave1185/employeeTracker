@@ -13,3 +13,4 @@ In terminal or GitBash run node server.js or run nodemon if downloaded.
 Follow prompts and answer questions.
 
 ## Screenshots
+![employeeTracker](https://github.com/DarkDave1185/employeeTracker/blob/master/Capture.JPG)
